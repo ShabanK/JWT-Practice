@@ -2,17 +2,28 @@
   "name": "jwt-practice",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "<shabankhawar99@gmail.com>",
+  "author": " <shabankhawar99@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShabanK/JWT-Practice.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ShabanK/JWT-Practice/issues"
+  },
+  "homepage": "https://github.com/ShabanK/JWT-Practice#readme",
+  "description": ""
 }
