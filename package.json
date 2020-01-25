@@ -5,7 +5,8 @@
   "author": " <shabankhawar99@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "devAuth": "nodemon auth.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
