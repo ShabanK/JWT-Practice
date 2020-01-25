@@ -5,11 +5,16 @@ const jwt = require("jsonwebtoken");
 
 //normally would do this part with mongo but for simplicity's sake...
 const users = [];
+let refreshTokens = [];
 
 const app = express();
 
 //middleware
 app.use(express.json());
+
+const generateAccessToken = user => {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
+};
 
 app.post("/signup", async (req, res) => {
   try {
@@ -22,6 +27,17 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post("/token", (req, res) => {
+  const refreshToken = req.body.token;
+  if (refreshToken === null) return res.sendStatus(403);
+  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    const accessToken = generateAccessToken({ username: user.username });
+    res.json({ accessToken: accessToken });
+  });
+});
+
 app.post("/login", async (req, res) => {
   const user = users.find(user => user.username === req.body.username);
   if (user == null) {
@@ -30,17 +46,21 @@ app.post("/login", async (req, res) => {
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
       const username = req.body.username;
-      const accessToken = jwt.sign(
-        { name: username },
-        process.env.ACCESS_TOKEN_SECRET
-      ); //takes whatever we want to serialize
-      res.json({ accessToken: accessToken });
+      const accessToken = generateAccessToken(user); //takes whatever we want to serialize
+      const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+      refreshTokens.push(refreshToken);
+      res.json({ accessToken: accessToken, refreshToken: refreshToken });
     } else {
       res.json(req.body);
     }
   } catch {
     res.status(500).send();
   }
+});
+
+app.delete("/logout", (req, res) => {
+  refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+  res.sendStatus(204);
 });
 
 app.get("/users", (req, res) => {

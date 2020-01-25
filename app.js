@@ -36,7 +36,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 app.get("/posts", authenticateToken, (req, res) => {
-  res.json(dummy.filter(post => post.username === req.user.name));
+  res.json(dummy.filter(post => post.username === req.user.username));
 });
 
 app.listen(5000, () => {
