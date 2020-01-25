@@ -3,22 +3,8 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+//normally would do this part with mongo but for simplicity's sake...
 const users = [];
-
-const dummy = [
-  {
-    username: "Dude",
-    title: "POST 1"
-  },
-  {
-    username: "Shaban",
-    title: "POST 1.5"
-  },
-  {
-    username: "Supreme",
-    title: "POST 2"
-  }
-];
 
 const app = express();
 
@@ -70,16 +56,8 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-app.get("/posts", authenticateToken, (req, res) => {
-  res.json(dummy);
-});
-
 app.get("/users", (req, res) => {
   res.json(users);
-});
-
-app.get("/login", (req, res) => {
-  //authenticate
 });
 
 app.listen(4000, () => {
